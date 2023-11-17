@@ -1,6 +1,8 @@
 import json
 import os
 import time
+from win10toast import ToastNotifier
+import schedule
 from datetime import datetime,timedelta
 
 
@@ -71,6 +73,17 @@ def cadastro():
         print("Paciente Cadastrado com Sucesso!")
     return cadastro
 
+def notificacaoPaciente(mensagem):
+    toaster = ToastNotifier()
+    toaster.show_toast("Hora de tomar o remédio!", mensagem, duration=10 )
+
+def agendarNotificacao(paciente):
+    for medicamento in paciente.get('medicamentos', []):
+        horarios = medicamento.get('horario(s)', [])
+        for horario in horarios:
+            schedule.every().day.at(horario).do(notificacaoPaciente,f'Hora de tomar {medicamento["medicamento"]}!')
+
+
 def inserirMedicamento():
     cpf = input("Digite o CPF do paciente: ")
 
@@ -111,15 +124,26 @@ def inserirMedicamento():
 
                 paciente['medicamentos'].append(novo_medicamento)
 
-                print(f'Medicamento inserido com sucesso para o paciente com CPF {cpf}')
-            break
+                agendarNotificacao(paciente)
 
+                print(f'Medicamento inserido com sucesso para o paciente com CPF {cpf}')
+
+            
     if not pacienteEncontrado:
         print(f"Paciente com o CPF {cpf} não encontrado no registro")
-
     
     with open('pacientes.json', 'w', encoding='utf-8') as arquivo:
         json.dump(pacientes, arquivo, indent=4, ensure_ascii=False)
+
+def mainLoop():
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+        user_input = input("Para encerrar o programa, digite 'exit' ou 'sair': ")
+        if user_input.lower() in ['exit', 'sair']:
+            print("Programa encerrado.")
+            break
 
 
 def mostrarDados():
@@ -180,7 +204,7 @@ def menuOpcoes():
     print('2 - Inserir Medicamento')
     print('3 - Mostrar dados dos Pacientes')
     print('4 - Excluir Paciente')
-    print('5 - Finalizar')
+    print('5 - Finalizar o Programa')
     try:
         opcao = int(input('Insira uma opção: '))
         if (opcao < 1) or (opcao > 5):
@@ -191,8 +215,7 @@ def menuOpcoes():
 
 
 
-
-
+        
 
 
 while EnfermeiroLogado == False:
@@ -203,7 +226,7 @@ while EnfermeiroLogado == False:
 
     
 if EnfermeiroLogado == True:
-    while True:
+   while True:
         opcao = menuOpcoes()
         if opcao == 1:
             cadastro()
@@ -214,10 +237,10 @@ if EnfermeiroLogado == True:
         elif opcao == 4:
             excluirPaciente()
         elif opcao == 5:
-            print("Finalizando o Sistema")
-            break
-
+            mainLoop()
+   
             
+
 
 
 
