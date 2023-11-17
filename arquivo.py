@@ -82,11 +82,11 @@ def inserirMedicamento():
             pacienteEncontrado = True
             medicamento = str(input("Insira o nome do medicamento: "))
 
-            # Verifica se a chave 'medicamentos' existe no dicionário do paciente
+            
             if 'medicamentos' not in paciente:
                 paciente['medicamentos'] = []
 
-            # Verifica se o medicamento já está na lista
+           
             if any(item.get('medicamento') == medicamento for item in paciente.get('medicamentos', [])):
                 print(f'O paciente já está utilizando este medicamento no momento')
             else:
@@ -160,13 +160,14 @@ def excluirPaciente():
         if paciente['cpf'] == cpf:
             pacienteEncontrado = True
             pacientes.remove(paciente)
+            time.sleep(2)
             print(f'Paciente com CPF {cpf} excluído com sucesso.')
             break
 
     if not pacienteEncontrado:
         print(f"Paciente com o CPF {cpf} não encontrado no registro.")
 
-    # Sobrescreve o arquivo com os dados atualizados
+    
     with open('pacientes.json', 'w', encoding='utf-8') as arquivo:
         json.dump(pacientes, arquivo, indent=4, ensure_ascii=False)
 
