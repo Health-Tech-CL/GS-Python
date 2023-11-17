@@ -1,13 +1,13 @@
 import json
 import os
 import time
-from win10toast import ToastNotifier
+from plyer import notification
 import schedule
-from datetime import datetime,timedelta
-
+import threading
 
 pacientes = []
 enfermeiros = []
+notificacoes_agendadas = []
 
 EnfermeiroLogado = False
 
@@ -15,17 +15,16 @@ def login():
     with open('enfermeiros.json', 'r', encoding='utf-8') as arquivo:
         enfermeiros = json.load(arquivo)
 
-    
     idenfermeiroEncontrado = False
     senhaCorreta = False
 
-    id: str = input("Digite seu ID: ")
+    id = input("Digite seu ID: ")
 
     for enfermeiro in enfermeiros:
         idEnfermeiro = enfermeiro['id']
         if idEnfermeiro == id:
             idenfermeiroEncontrado = True
-            senha: str = input("Digite sua senha: ")
+            senha = input("Digite sua senha: ")
             if senha == enfermeiro['senha']:
                 print(f'Bem-Vindo(a) {enfermeiro["nome"]}')
                 senhaCorreta = True
@@ -37,7 +36,6 @@ def login():
         print("ID Incorreto!")
         return False
 
-    
 
 def cadastro():
     global pacientes
@@ -48,19 +46,19 @@ def cadastro():
     else:
         pacientes = []
 
-    cpf = str(input("Insira o CPF: "))
+    cpf = input("Insira o CPF: ")
     pacienteCadastrado = False
 
     for paciente in pacientes:
         if paciente['cpf'] == cpf:
             pacienteCadastrado = True
-            print(f"O paciente de cpf {paciente['cpf']} já esta cadastrado!")
+            print(f"O paciente de cpf {paciente['cpf']} já está cadastrado!")
             break
     if not pacienteCadastrado:
-        nome = str(input("Insira o nome do paciente: "))
-        idade = str(input("Insira a idade do paciente: "))
+        nome = input("Insira o nome do paciente: ")
+        idade = input("Insira a idade do paciente: ")
 
-        cadastro={
+        cadastro = {
             "cpf": cpf,
             "nome": nome,
             "idade": idade,
@@ -73,15 +71,24 @@ def cadastro():
         print("Paciente Cadastrado com Sucesso!")
     return cadastro
 
+
+
+
 def notificacaoPaciente(mensagem):
-    toaster = ToastNotifier()
-    toaster.show_toast("Hora de tomar o remédio!", mensagem, duration=10 )
+    notification.notify(
+        title="Hora de tomar o remédio!",
+        message=mensagem,
+        timeout=10
+    )
+
 
 def agendarNotificacao(paciente):
     for medicamento in paciente.get('medicamentos', []):
         horarios = medicamento.get('horario(s)', [])
         for horario in horarios:
-            schedule.every().day.at(horario).do(notificacaoPaciente,f'Hora de tomar {medicamento["medicamento"]}!')
+            print(f'Agendando notificação para {horario}')
+            schedule.every().day.at(horario).do(notificacaoPaciente, f'Hora de tomar {medicamento["medicamento"]}!')
+
 
 
 def inserirMedicamento():
@@ -95,31 +102,29 @@ def inserirMedicamento():
     for paciente in pacientes:
         if paciente['cpf'] == cpf:
             pacienteEncontrado = True
-            medicamento = str(input("Insira o nome do medicamento: "))
+            medicamento = input("Insira o nome do medicamento: ")
 
-            
             if 'medicamentos' not in paciente:
                 paciente['medicamentos'] = []
 
-           
             if any(item.get('medicamento') == medicamento for item in paciente.get('medicamentos', [])):
                 print(f'O paciente já está utilizando este medicamento no momento')
             else:
-                dosagem = str(input("Insira a dosagem por dia: "))
+                dosagem = input("Insira a dosagem por dia: ")
                 dias = int(input("Insira o total de dias: "))
 
                 horarios = []
                 total_horarios = int(input("Total de Horários que o Paciente terá que tomar por dia: "))
 
                 for i in range(total_horarios):
-                    horario = str(input("Insira o(s) horário(s): "))
+                    horario = input("Insira o(s) horário(s): ")
                     horarios.append(horario)
-                    
+
                 novo_medicamento = {
                     'medicamento': medicamento,
                     'dosagem': dosagem,
                     'quantos dias': dias,
-                    'horario(s)': horarios 
+                    'horario(s)': horarios
                 }
 
                 paciente['medicamentos'].append(novo_medicamento)
@@ -128,23 +133,17 @@ def inserirMedicamento():
 
                 print(f'Medicamento inserido com sucesso para o paciente com CPF {cpf}')
 
-            
     if not pacienteEncontrado:
         print(f"Paciente com o CPF {cpf} não encontrado no registro")
-    
+
     with open('pacientes.json', 'w', encoding='utf-8') as arquivo:
         json.dump(pacientes, arquivo, indent=4, ensure_ascii=False)
 
-def mainLoop():
+
+def notificacoes_thread():
     while True:
         schedule.run_pending()
         time.sleep(1)
-
-        user_input = input("Para encerrar o programa, digite 'exit' ou 'sair': ")
-        if user_input.lower() in ['exit', 'sair']:
-            print("Programa encerrado.")
-            break
-
 
 def mostrarDados():
     with open('pacientes.json', 'r', encoding='utf-8') as arquivo:
@@ -193,11 +192,10 @@ def excluirPaciente():
     if not pacienteEncontrado:
         print(f"Paciente com o CPF {cpf} não encontrado no registro.")
 
-    
     with open('pacientes.json', 'w', encoding='utf-8') as arquivo:
         json.dump(pacientes, arquivo, indent=4, ensure_ascii=False)
 
-        
+
 def menuOpcoes():
     print('O que deseja fazer?')
     print('1 - Cadastrar Paciente')
@@ -215,18 +213,18 @@ def menuOpcoes():
 
 
 
-        
-
-
 while EnfermeiroLogado == False:
-    print("Olá! Pra inserir as informações do paciente, é preciso que esteja logado em nosso sistema!")
+    print("Olá! Para inserir as informações do paciente, é preciso que esteja logado em nosso sistema!")
     loginEnfermeiro = login()
     if loginEnfermeiro == True:
         EnfermeiroLogado = True
 
-    
 if EnfermeiroLogado == True:
-   while True:
+    # Inicie a thread para processar notificações
+    notificacoes_thread = threading.Thread(target=notificacoes_thread)
+    notificacoes_thread.start()
+
+    while True:
         opcao = menuOpcoes()
         if opcao == 1:
             cadastro()
@@ -237,11 +235,10 @@ if EnfermeiroLogado == True:
         elif opcao == 4:
             excluirPaciente()
         elif opcao == 5:
-            mainLoop()
-   
-            
+            print("Finalizando o programa")
+            break
 
-
-
+    # Aguarde até que a thread de notificações seja concluída antes de encerrar o programa
+    notificacoes_thread.join()
 
 
