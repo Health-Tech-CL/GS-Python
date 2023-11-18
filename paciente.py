@@ -41,7 +41,7 @@ def visualizarMedicacao():
     for paciente in pacientes:
         if paciente.get('cpf') == cpf_logado:  # Usamos o CPF do paciente logado
             print("\n Dados do Paciente: ")
-
+            time.sleep(1)
             medicamentos = paciente.get('medicamentos', [])
             if medicamentos:
                 print("\nMedicamentos:")
@@ -61,9 +61,7 @@ def visualizarMedicacao():
                 time.sleep(2)
                 return False
 
-
-
-    
+ 
 def notificacao(mensagem):
     notification.notify(
         title="Hora de tomar o remédio!",

@@ -3,16 +3,6 @@
         "cpf": "12345678910",
         "nome": "Abel Ferreira",
         "idade": "59",
-        "medicamentos": [
-            {
-                "medicamento": "Luftal",
-                "dosagem": "1ml",
-                "quantos dias": 5,
-                "horario(s)": [
-                    "09:58",
-                    "09:59"
-                ]
-            }
-        ]
+        "medicamentos": []
     }
 ]
