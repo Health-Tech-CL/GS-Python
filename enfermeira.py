@@ -87,7 +87,7 @@ def agendarNotificacao(paciente):
         horarios = medicamento.get('horario(s)', [])
         for horario in horarios:
             print(f'Agendando notificação para {horario}')
-            schedule.every().day.at(horario).do(notificacaoPaciente, f'Hora de tomar {medicamento["medicamento"]}!')
+            schedule.every().day.at(horario).do(notificacaoPaciente, f'Hora de tomar {medicamento["medicamento"]}, {paciente["nome"]}!')
 
 def notificacoes_thread():
     while True:
@@ -170,7 +170,7 @@ def mostrarDados():
                 print(f"  Horário(s): {horarios}")
                 print("\n---")
 
-    print("\nFim da lista de pacientes.")
+    print("\nFim da lista de pacientes.\n")
     time.sleep(2)
 
 def editarDados():
@@ -203,6 +203,9 @@ def editarDados():
             
             else:
                 print("Opção Inválida")
+
+            with open('pacientes.json', 'w', encoding='utf-8') as arquivo_saida:
+                json.dump(pacientes, arquivo_saida, indent=4, ensure_ascii=False)
                 
             break
 
@@ -274,10 +277,12 @@ def excluirPaciente():
             pacientes.remove(paciente)
             time.sleep(2)
             print(f'Paciente com CPF {cpf} excluído com sucesso.')
+            time.sleep(1)
             break
 
     if not pacienteEncontrado:
         print(f"Paciente com o CPF {cpf} não encontrado no registro.")
+        time.sleep(1)
 
     with open('pacientes.json', 'w', encoding='utf-8') as arquivo:
         json.dump(pacientes, arquivo, indent=4, ensure_ascii=False)
@@ -289,7 +294,7 @@ def menuOpcoes():
     print('2 - Inserir Medicamento')
     print('3 - Excluir Medicamento')
     print('4 - Mostrar dados dos Pacientes')
-    print('5- Editar Dados dos Pacientes')
+    print('5-  Editar Dados dos Pacientes')
     print('6 - Excluir Paciente')
     print('7 - Finalizar o Programa')
     try:
