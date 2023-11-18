@@ -89,6 +89,11 @@ def agendarNotificacao(paciente):
             print(f'Agendando notificação para {horario}')
             schedule.every().day.at(horario).do(notificacaoPaciente, f'Hora de tomar {medicamento["medicamento"]}!')
 
+def notificacoes_thread():
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
 
 
 def inserirMedicamento():
@@ -103,7 +108,6 @@ def inserirMedicamento():
         if paciente['cpf'] == cpf:
             pacienteEncontrado = True
             medicamento = input("Insira o nome do medicamento: ")
-
             if 'medicamentos' not in paciente:
                 paciente['medicamentos'] = []
 
@@ -140,10 +144,6 @@ def inserirMedicamento():
         json.dump(pacientes, arquivo, indent=4, ensure_ascii=False)
 
 
-def notificacoes_thread():
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
 
 def mostrarDados():
     with open('pacientes.json', 'r', encoding='utf-8') as arquivo:
@@ -171,6 +171,93 @@ def mostrarDados():
                 print("\n---")
 
     print("\nFim da lista de pacientes.")
+    time.sleep(2)
+
+def editarDados():
+    cpf = input("Insira o cpf do paciente que deseja editar os dados: ")
+
+    with open('pacientes.json', 'r', encoding='utf-8') as arquivo:
+        pacientes = json.load(arquivo)
+
+    pacienteEncontrado = False
+
+    for paciente in pacientes:
+        if paciente['cpf'] == cpf:
+            pacienteEncontrado = True
+
+            print(f"Editando as Informações do Paciente com CPF {cpf}")
+            print("1 - Editar Nome")
+            print("2 - Editar Idade")
+
+            opcao = int(input("Insira a opção desejada: "))
+
+            if opcao == 1:
+                novo_nome = input("Insira o novo nome: ")
+                paciente['nome'] = novo_nome
+                print("Nome alterado com sucesso!")
+            
+            elif opcao == 2:
+                nova_idade = input("Insira a idade nova: ")
+                paciente['idade'] = nova_idade
+                print("Idade alterada com sucesso!")
+            
+            else:
+                print("Opção Inválida")
+                
+            break
+
+
+def excluirMedicamento():
+    cpf = input("Insira o CPF do paciente que deseja excluir o Medicamento: ")
+
+    with open('pacientes.json', 'r', encoding='utf-8') as arquivo:
+        pacientes = json.load(arquivo)
+    
+    pacienteEncontrado = False
+
+    for paciente in pacientes:
+        if paciente['cpf'] == cpf:
+            pacienteEncontrado = True
+            medicamentos = paciente.get('medicamentos', [])
+
+            if not medicamentos:
+                print(f'O paciente com cpf {cpf} não possui medicamentos registrados')
+                return
+            
+            print("Medicamentos do Paciente: ")
+            for i, med in enumerate(medicamentos, start=1):
+                print(f'{i}. {med.get('medicamento')}')
+
+            medicamento_nome = input("Insira o nome do remédio que deseja excluir: ")
+            medicamento_encontrado = False
+
+            for med in medicamentos:
+                if med.get('medicamento') == medicamento_nome:
+                    medicamento_encontrado = True
+                    medicamentos.remove(med)
+
+                    for job, mensagem in notificacoes_agendadas:
+                        if mensagem == f'Hora de tomar {medicamento_nome}!':
+                            job.unschedule()
+                            notificacoes_agendadas.remove((job, mensagem))
+                            break
+
+                    time.sleep(2)
+                    print(f'Medicamento {medicamento_nome} removido com sucesso para o paciente com CPF {cpf}')
+                    break
+
+            if not medicamento_encontrado:
+                print(f"Medicamento {medicamento_nome} não encontrado para o paciente com CPF {cpf}")
+
+            break
+
+    if not pacienteEncontrado:
+        print(f"Paciente com o CPF {cpf} não encontrado no registro")
+
+    with open('pacientes.json', 'w', encoding='utf-8') as arquivo:
+        json.dump(pacientes, arquivo, indent=4, ensure_ascii=False)
+
+
 
 
 def excluirPaciente():
@@ -200,12 +287,14 @@ def menuOpcoes():
     print('O que deseja fazer?')
     print('1 - Cadastrar Paciente')
     print('2 - Inserir Medicamento')
-    print('3 - Mostrar dados dos Pacientes')
-    print('4 - Excluir Paciente')
-    print('5 - Finalizar o Programa')
+    print('3 - Excluir Medicamento')
+    print('4 - Mostrar dados dos Pacientes')
+    print('5- Editar Dados dos Pacientes')
+    print('6 - Excluir Paciente')
+    print('7 - Finalizar o Programa')
     try:
         opcao = int(input('Insira uma opção: '))
-        if (opcao < 1) or (opcao > 5):
+        if (opcao < 1) or (opcao > 7):
             raise TypeError
         return opcao
     except ValueError:
@@ -231,12 +320,17 @@ if EnfermeiroLogado == True:
         elif opcao == 2:
             inserirMedicamento()
         elif opcao == 3:
-            mostrarDados()
+            excluirMedicamento()
         elif opcao == 4:
-            excluirPaciente()
+            mostrarDados()
         elif opcao == 5:
+            break
+        elif opcao == 6:
+           excluirPaciente()
+        elif opcao == 7:
             print("Finalizando o programa")
             break
+
 
     # Aguarde até que a thread de notificações seja concluída antes de encerrar o programa
     notificacoes_thread.join()
