@@ -154,7 +154,7 @@ def mostrarDados():
         return
 
     for paciente in pacientes:
-        print("\nDados do Paciente:")
+        print("\n Dados do Paciente:")
         print(f"CPF: {paciente['cpf']}")
         print(f"Nome: {paciente.get('nome', 'N/A')}")
         print(f"Idade: {paciente.get('idade', 'N/A')}")
@@ -226,7 +226,7 @@ def excluirMedicamento():
             
             print("Medicamentos do Paciente: ")
             for i, med in enumerate(medicamentos, start=1):
-                print(f'{i}. {med.get('medicamento')}')
+                print(f'{i}. {med.get("medicamento")}')
 
             medicamento_nome = input("Insira o nome do remédio que deseja excluir: ")
             medicamento_encontrado = False
@@ -324,7 +324,7 @@ if EnfermeiroLogado == True:
         elif opcao == 4:
             mostrarDados()
         elif opcao == 5:
-            break
+            editarDados()
         elif opcao == 6:
            excluirPaciente()
         elif opcao == 7:
