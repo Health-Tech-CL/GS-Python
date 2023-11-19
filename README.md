@@ -1,7 +1,10 @@
 # Dose Certa App
-
 ## Feito para que?
 Projeto realizado para a matéria de Computational Thinking with Python, entrega da Global Solution, que nesse semestre contou com a parceria da FIAP com a HapVida NotreDameIntermédica.
+
+## Alunas:
+<a href="https://github.com/camilapadalino">Camila Padalino</a> : 98316<br>
+<a href="https://github.com/Luanacabezaolias">Luana Cabeazolias</a> : 99320 <br>
 
 ## Instruções Gerais para o acesso
 1. Fazer as importações necessárias no terminal:
