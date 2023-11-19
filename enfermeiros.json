@@ -7,5 +7,10 @@
         "id": "67890",
         "nome": "Luana Cabezaolias",
         "senha": "DoseCertaApp"
+    },
+    {
+        "id": "54321",
+        "nome": "Enfermeiro(a)",
+        "senha": "DoseCertaApp"
     }
 ]

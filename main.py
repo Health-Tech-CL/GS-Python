@@ -31,7 +31,7 @@ def login():
             senha = input("Digite sua senha: ")
             time.sleep(1)
             if senha == enfermeiro['senha']:
-                print(f'Bem-Vindo(a) {enfermeiro["nome"]}')
+                print(f'Bem-Vindo(a), {enfermeiro["nome"]}!')
                 time.sleep(2)
                 senhaCorreta = True
                 return True
