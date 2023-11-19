@@ -1,5 +1,5 @@
 # Dose Certa App
-## Feito para que?
+## Sobre
 Projeto realizado para a matéria de Computational Thinking with Python, entrega da Global Solution, que nesse semestre contou com a parceria da FIAP com a HapVida NotreDameIntermédica.
 
 ### Alunas:
