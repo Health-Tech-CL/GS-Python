@@ -1,12 +1,12 @@
 # Dose Certa App
 ## Sobre
-Projeto realizado para a matéria de Computational Thinking with Python, entrega da Global Solution, que nesse semestre contou com a parceria da FIAP com a HapVida NotreDameIntermédica.
+Projeto realizado para a matéria de Computational Thinking with Python, entrega da Global Solution, que nesse semestre contou com a parceria da FIAP com a HapVida NotreDame Intermédica.
 
 ### Alunas:
 <a href="https://github.com/camilapadalino">Camila Padalino</a> : 98316<br>
 <a href="https://github.com/Luanacabezaolias">Luana Cabeazolias</a> : 99320 <br>
 
-## Instruções Gerais para o acesso
+## Instruções Gerais para o Acesso
 1. Fazer as importações necessárias no terminal:
   - py -3.12 -m pip install plyer ou apenas pip install plyer (cheque sempre em qual versão está o python no seu computador, se for diferente do 3.12, muda para a sua)
   - py -3.12 -m pip install schedule ou apenas pip install schedule (cheque sempre em qual versão está o python no seu computador, se for diferente do 3.12, muda para a sua)
