@@ -6,6 +6,11 @@ from plyer import notification
 import schedule
 import threading
 
+
+# Leia o README antes de rodar o código, pois há informações importantes!!!!!!
+
+
+
 # Aqui são as listas que criamos para deixar as informações no banco de dados organizadas
 pacientes = []
 enfermeiros = []

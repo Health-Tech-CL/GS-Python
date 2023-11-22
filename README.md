@@ -10,7 +10,15 @@ Projeto realizado para a matéria de Computational Thinking with Python, entrega
 1. Fazer as importações necessárias no terminal:
   - py -3.12 -m pip install plyer ou apenas pip install plyer (cheque sempre em qual versão está o python no seu computador, se for diferente do 3.12, muda para a sua)
   - py -3.12 -m pip install schedule ou apenas pip install schedule (cheque sempre em qual versão está o python no seu computador, se for diferente do 3.12, muda para a sua)
-2. Ao realizar todas as importações necessárias, e ao rodar o código, insira as seguintes informações quando for pedido:
+
+2. Habilitar as notificações no seu computador:
+ - Tenha certeza que suas notificações estejam habilitadas no seu computados, para que a notificação possa aparecer.
+ - Cheque se o seu VScode está configurado no ZenMode! Como ver?
+  Clique no ícone de engrenagem no lado inferior esquerdo, e depois vá em settings.
+  Depois, pesquise por Notifications e o primeiro item será o "Zen Mode: Silent Notifications". Desabilite ele e reinicie o Vscode. Assim as notificações estarão habilitadas.
+
+
+3. Ao realizar todas as importações necessárias, e ao rodar o código, insira as seguintes informações quando for pedido:
   - "Digite seu ID": 54321
   - "Digite sua senha": DoseCertaApp
 
