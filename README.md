@@ -19,6 +19,6 @@ Projeto realizado para a matéria de Computational Thinking with Python, entrega
 Esse sistema em python simula o cadastro de pacientes e toda a programação de notificações ao agendar uma medicação para o paciente,<br>gerando um lembrete no horário prescrito pelo médico(a) ou enfermeiro(a).
 Mais tarde, esse sistema será integrado com o nosso aplicativo DoseCertaApp, o aplicativo responsável por alertar os pacientes no horário que precisarem tomar seus medicamentos.
 ## Mais informações:
-Para mais informações, acesse o pdf anexado abaixo:
+Para mais informações, acesse o PDF anexado abaixo:
 
 [Global Solution - Python.pdf](https://github.com/Health-Tech-CL/GS-Python/files/13404388/Global.Solution.-.Python.pdf)
