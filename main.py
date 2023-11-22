@@ -137,7 +137,7 @@ def inserirMedicamento():
                 print(f'O paciente já está utilizando este medicamento no momento')
                 time.sleep(1)
             else:
-                dosagem = input("Insira a dosagem por dia: ")
+                dosagem = input("Insira a dosagem: ")
                 time.sleep(1)
                 dias = int(input("Insira o total de dias: "))
                 time.sleep(1)
