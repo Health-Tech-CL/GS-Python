@@ -29,4 +29,4 @@ Mais tarde, esse sistema será integrado com o nosso aplicativo DoseCertaApp, o 
 ## Mais informações:
 Para mais informações, acesse o PDF anexado abaixo:
 
-[Global Solution - Python.pdf](https://github.com/Health-Tech-CL/GS-Python/files/13404388/Global.Solution.-.Python.pdf)
+[Global Solution - Python.pdf](https://github.com/Health-Tech-CL/GS-Python/files/13453056/Global.Solution.-.Python.pdf)
