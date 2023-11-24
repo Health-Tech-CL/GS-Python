@@ -9,10 +9,8 @@ from paho.mqtt import client as mqtt_client
 broker = '46.17.108.113'
 port = 1883
 topic = "/TEF/hosp200/cmd"
-# Generate a Client ID with the publish prefix.
 client_id = f'publish-{random.randint(0, 1000)}'
-# username = 'emqx'
-# password = 'public'
+
 
 def connect_mqtt():
     def on_connect(client, userdata, flags, rc):
@@ -32,7 +30,7 @@ def publish(client):
     msg_count = 1
     while True:
         time.sleep(1)
-        msg = f"messages: {msg_count}"
+        msg = f"hosp200@on|"
         result = client.publish(topic, msg)
         # result: [0, 1]
         status = result[0]
